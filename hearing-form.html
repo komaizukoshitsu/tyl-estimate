@@ -148,6 +148,9 @@ input:focus,textarea:focus{border-color:var(--pl);background:#fff}
 /* TOPページ常設表示 */
 .always-page{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#eef4f6;border-radius:8px;border:1.5px solid #c5d8de;margin-bottom:8px;color:var(--primary);font-size:13px;font-weight:600}
 .always-page .must-badge{margin-left:auto}
+/* URL入力 */
+.url-stack input{margin-bottom:6px}
+.url-stack input:last-child{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -192,6 +195,18 @@ input:focus,textarea:focus{border-color:var(--pl);background:#fff}
             <input type="radio" name="renewal" value="renewal" onchange="setRenewal(true)">
             🔄 既存サイトのリニューアル
           </label>
+        </div>
+      </div>
+      <div class="fr" id="current-url-row" style="display:none">
+        <label class="lbl">現在のサイトURL</label>
+        <input type="text" id="h-current-url" placeholder="https://example-clinic.jp">
+      </div>
+      <div class="fr">
+        <label class="lbl">参考にしたいサイトURL <span style="font-size:11px;color:var(--sub);font-weight:400">（任意・最大3件）</span></label>
+        <div class="url-stack">
+          <input type="text" id="h-ref-url1" placeholder="https://...">
+          <input type="text" id="h-ref-url2" placeholder="https://...">
+          <input type="text" id="h-ref-url3" placeholder="https://...">
         </div>
       </div>
     </div>
@@ -484,8 +499,68 @@ input:focus,textarea:focus{border-color:var(--pl);background:#fff}
     </div>
   </div>
 
-  <!-- ─── STEP 6: 確認・出力 ─── -->
+  <!-- ─── STEP 6: サイト設計ヒント ─── -->
   <div class="sp" id="sp6">
+    <div class="sp-card">
+      <div class="sp-h">サイト設計ヒント <span style="font-size:12px;font-weight:400;color:var(--sub)">— Figmaワイヤーフレームに反映されます</span></div>
+
+      <div class="sec-lbl">メインのコンバージョン（複数選択可）</div>
+      <div class="chk-grid">
+        <label class="chk-item"><input type="checkbox" class="cv-chk" value="電話">📞 電話</label>
+        <label class="chk-item"><input type="checkbox" class="cv-chk" value="Web予約">🗓 Web予約</label>
+        <label class="chk-item"><input type="checkbox" class="cv-chk" value="LINE予約">💬 LINE予約</label>
+        <label class="chk-item"><input type="checkbox" class="cv-chk" value="問い合わせフォーム">✉️ 問い合わせフォーム</label>
+      </div>
+      <div class="toggle-row" style="margin-top:8px">
+        <div><span class="toggle-label">予約システムの外部埋め込み</span><span class="toggle-sub">EPARKや各種予約サービスのウィジェット埋め込み</span></div>
+        <label class="sw"><input type="checkbox" id="d-booking"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">LINE常設ボタン（フローティング）</span><span class="toggle-sub">画面固定のLINEボタンを全ページに設置</span></div>
+        <label class="sw"><input type="checkbox" id="d-line"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:12px">TOPページに含めるセクション</div>
+      <div class="chk-grid">
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="院長挨拶" checked>👨‍⚕️ 院長挨拶</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="診療科目一覧" checked>🏥 診療科目一覧</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="スタッフ紹介">👥 スタッフ紹介</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="施設ギャラリー">🖼 施設ギャラリー</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="アクセス" checked>📍 アクセス</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="お知らせ" checked>📰 お知らせ</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="よくある質問">❓ よくある質問</label>
+        <label class="chk-item"><input type="checkbox" class="top-sec-chk" value="ビフォーアフター">✨ ビフォーアフター</label>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:12px">ヘッダー設計</div>
+      <div class="fr">
+        <label class="lbl">ナビゲーション項目数</label>
+        <div class="radio-row">
+          <label class="radio-card" id="nav-small-lbl" onclick="setNavSize('small',this)"><input type="radio" name="nav-size">5項目以内</label>
+          <label class="radio-card sel" id="nav-medium-lbl" onclick="setNavSize('medium',this)"><input type="radio" name="nav-size" checked>6〜8項目</label>
+          <label class="radio-card" id="nav-large-lbl" onclick="setNavSize('large',this)"><input type="radio" name="nav-size">9項目以上</label>
+        </div>
+      </div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">ヘッダーに電話番号を表示</span><span class="toggle-sub">PC表示でヘッダー右側に電話番号を配置</span></div>
+        <label class="sw"><input type="checkbox" id="d-tel" checked><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">スタッフ紹介ページあり</span><span class="toggle-sub">スタッフ人数によってレイアウトが変わります</span></div>
+        <label class="sw"><input type="checkbox" id="d-staff" onchange="toggleStaffCount()"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div id="staff-count-row" style="display:none;padding:8px 0;align-items:center;gap:12px">
+        <span style="font-size:12px;color:var(--sub)">スタッフ人数（目安）</span>
+        <input type="number" class="small-num" id="d-staff-q" value="3" min="1">
+        <span style="font-size:11px;color:var(--sub)">名</span>
+      </div>
+
+      <div class="nb info" style="margin-top:16px">💡 この情報はFigmaワイヤーフレームの自動生成に使われます。概算見積もりには影響しません。</div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 7: 確認・出力 ─── -->
+  <div class="sp" id="sp7">
     <div class="sp-card">
       <div class="sp-h">内容の確認</div>
       <div id="summary-body"><!-- JS で生成 --></div>
@@ -506,13 +581,17 @@ input:focus,textarea:focus{border-color:var(--pl);background:#fff}
 // ── 状態管理 ────────────────────────────────────────────────────
 const H = {
   client:'', contact:'', isRenewal:false,
+  urls:{ current:'', references:[] },
   plan:'', aType:'',
   hospital:{ fixedPages:[], extraPages:'', blog:true, blogCategories:1, form:true, err:true,
              specialtyPages:0, branchCount:0 },
   recruit:{ fixedPages:[], extraPages:'', postCategories:[], extraPostCategories:'', postList:true, form:true, privacy:true, err:false },
   options:{ localSEO:true, pageSpeed:true, copywriting:1 },
   migration:{ permalink:false, contentAdjust:0, serverCheck:false, multiSiteMerge:false, branchMultiSite:false },
-  maintenance:'none'
+  maintenance:'none',
+  design:{ mainCV:[], booking:false, lineButton:false,
+           topSections:['院長挨拶','診療科目一覧','アクセス','お知らせ'],
+           navSize:'medium', headerTel:true, staffCount:0 }
 };
 
 // ── ステップ定義 ──────────────────────────────────────────────────
@@ -522,7 +601,8 @@ const ALL_STEPS = [
   { id:'sp3', title:'病院サイト ページ構成', show:()=>isHosp() },
   { id:'sp4', title:'採用サイト ページ構成', show:()=>isRec() },
   { id:'sp5', title:'オプション・保守' },
-  { id:'sp6', title:'確認・出力' },
+  { id:'sp6', title:'サイト設計ヒント', show:()=>isHosp() },
+  { id:'sp7', title:'確認・出力' },
 ];
 
 function isHosp(){ return ['a1','a2','a3','ab'].includes(H.plan); }
@@ -596,6 +676,12 @@ function collectStep(){
   if(sid==='sp1'){
     H.client  = document.getElementById('h-client').value.trim();
     H.contact = document.getElementById('h-contact').value.trim();
+    H.urls.current = document.getElementById('h-current-url').value.trim();
+    H.urls.references = [
+      document.getElementById('h-ref-url1').value.trim(),
+      document.getElementById('h-ref-url2').value.trim(),
+      document.getElementById('h-ref-url3').value.trim(),
+    ].filter(Boolean);
   }
   if(sid==='sp3'){
     H.hospital.fixedPages = [...document.querySelectorAll('.hfp-chk:checked')].map(el=>el.value);
@@ -634,6 +720,15 @@ function collectStep(){
     // 分院マルチサイトはSTEP3の入力から決まる
     H.migration.branchMultiSite = H.hospital.branchCount > 0;
   }
+  if(sid==='sp6'){
+    H.design.mainCV      = [...document.querySelectorAll('.cv-chk:checked')].map(el=>el.value);
+    H.design.booking     = document.getElementById('d-booking').checked;
+    H.design.lineButton  = document.getElementById('d-line').checked;
+    H.design.topSections = [...document.querySelectorAll('.top-sec-chk:checked')].map(el=>el.value);
+    H.design.headerTel   = document.getElementById('d-tel').checked;
+    H.design.staffCount  = document.getElementById('d-staff').checked
+      ? (parseInt(document.getElementById('d-staff-q').value)||0) : 0;
+  }
 }
 
 // ── プラン選択 ────────────────────────────────────────────────────
@@ -662,6 +757,7 @@ function setRenewal(v){
   document.getElementById('rc-new').classList.toggle('sel', !v);
   document.getElementById('rc-rnw').classList.toggle('sel',  v);
   document.getElementById('renewal-opts').style.display = v?'block':'none';
+  document.getElementById('current-url-row').style.display = v?'block':'none';
 }
 function setMnt(v){
   H.maintenance=v;
@@ -689,6 +785,15 @@ function toggleBranchCount(){
   const on = document.getElementById('h-branch').checked;
   document.getElementById('branch-count-row').style.display = on?'flex':'none';
 }
+function setNavSize(v, el){
+  H.design.navSize = v;
+  ['small','medium','large'].forEach(x=>document.getElementById('nav-'+x+'-lbl')?.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function toggleStaffCount(){
+  const on = document.getElementById('d-staff').checked;
+  document.getElementById('staff-count-row').style.display = on?'flex':'none';
+}
 
 // ── サマリー生成 ─────────────────────────────────────────────────
 function buildSummary(){
@@ -712,6 +817,8 @@ function buildSummary(){
   html += row('担当者名',     H.contact||'—');
   html += row('プロジェクト', H.isRenewal?'リニューアル':'新規制作');
   html += row('プラン', `<span class="sum-tag ${H.plan.startsWith('a')?'pta'+H.plan.slice(-1):'ptb'}" style="background:${planTagColor(H.plan)}">${planLabels[H.plan]||H.plan}</span>`+(H.plan==='ab'&&H.aType?` <span class="sum-tag" style="background:#aaa">${atLabels[H.aType]}</span>`:''));
+  if(H.urls.current) html += row('現在のサイト', `<a href="${H.urls.current}" target="_blank" style="color:var(--primary)">${H.urls.current}</a>`);
+  if(H.urls.references.length>0) html += row('参考サイト', H.urls.references.map(u=>`<a href="${u}" target="_blank" style="color:var(--primary);display:block;word-break:break-all">${u}</a>`).join(''));
   html += '</div>';
 
   // 病院サイト
@@ -765,6 +872,21 @@ function buildSummary(){
   html += row('保守プラン', mntLabel[H.maintenance]||'なし');
   html += '</div>';
 
+  // サイト設計ヒント
+  if(isHosp()){
+    html += '<div class="sum-section"><div class="sum-title">サイト設計ヒント</div>';
+    html += row('メインCV', H.design.mainCV.length>0 ? H.design.mainCV.map(pill).join('') : '（未設定）');
+    const extras = [];
+    if(H.design.booking)    extras.push('予約システム埋め込み');
+    if(H.design.lineButton) extras.push('LINE常設ボタン');
+    if(extras.length>0) html += row('常設UI', extras.map(pill).join(''));
+    if(H.design.topSections.length>0) html += row('TOPセクション', H.design.topSections.map(pill).join(''));
+    const navLabels = {small:'5項目以内', medium:'6〜8項目', large:'9項目以上'};
+    html += row('ヘッダーナビ', (navLabels[H.design.navSize]||'')+(H.design.headerTel?' ／ 電話番号あり':''));
+    if(H.design.staffCount>0) html += row('スタッフ人数', H.design.staffCount+'名');
+    html += '</div>';
+  }
+
   document.getElementById('summary-body').innerHTML = html;
 }
 
@@ -787,6 +909,7 @@ function buildJSON(){
   return {
     version:'hearing-1.0',
     client:H.client, contact:H.contact, isRenewal:H.isRenewal,
+    urls:H.urls,
     plan:H.plan, aType:at||null,
     hospital: isHosp()?{
       fixedPages:fp_h, blog:H.hospital.blog,
@@ -803,6 +926,7 @@ function buildJSON(){
     options:H.options,
     migration:H.migration,
     maintenance:H.maintenance,
+    design:H.design,
     generatedAt: new Date().toISOString()
   };
 }
