@@ -84,8 +84,9 @@
 <p class="sub">見積もりフォームのJSONからワイヤーフレームを自動生成します</p>
 
 <div class="info">
-  見積もりフォームで <b>「📐 Figma用データ出力」</b> ボタンを押してJSONをダウンロード。<br>
-  そのファイルの中身をすべて貼り付けてください。
+  以下のどちらかのJSONを貼り付けてください：<br>
+  ・見積もりフォームの <b>「📐 Figma用データ出力」</b> ボタンで出力したJSON<br>
+  ・ヒアリングフォームの <b>「📥 JSONをダウンロード」</b> で出力したJSON（hearing-1.0形式）
 </div>
 
 <textarea id="json-input"
@@ -133,14 +134,17 @@
       return;
     }
 
-    if (!data.siteMap || data.siteMap.length === 0) {
-      errEl.textContent = '⚠️ ページ情報（siteMap）が見つかりません。プランを選択してから出力してください。';
+    // hearing-1.0形式の場合はsiteMapなしでもOK
+    var isHearing = data.version === 'hearing-1.0';
+    if (!isHearing && (!data.siteMap || data.siteMap.length === 0)) {
+      errEl.textContent = '⚠️ ページ情報が見つかりません。見積もりフォームまたはヒアリングフォームのJSONを貼り付けてください。';
       errEl.style.display = 'block';
       return;
     }
 
     btnEl.disabled = true;
-    statEl.textContent = '⏳ ' + data.siteMap.length + 'ページ生成中...';
+    var pageCount = isHearing ? '（ヒアリングJSONから自動生成）' : data.siteMap.length + 'ページ';
+    statEl.textContent = '⏳ ' + pageCount + ' 生成中...';
     statEl.style.display = 'block';
 
     parent.postMessage({ pluginMessage: { type: 'generate', data: data } }, '*');

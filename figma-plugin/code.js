@@ -8,11 +8,36 @@ figma.ui.onmessage = async function(msg) {
 
   if (msg.type === 'generate') {
     var data   = msg.data;
-    var pages  = data.siteMap || [];
     var design = data.design  || {};
 
+    // ── hearing-1.0形式の場合、siteMapを自動生成 ──────────────
+    var pages = data.siteMap || [];
+    if (pages.length === 0 && data.version === 'hearing-1.0') {
+      var h = data.hospital || {};
+      var sec = '病院サイト';
+      pages.push({ section: sec, name: 'TOPページ', type: 'top' });
+      var fp = h.fixedPages || [];
+      for (var fpi = 0; fpi < fp.length; fpi++)
+        pages.push({ section: sec, name: fp[fpi], type: 'fixed' });
+      if (h.blog) {
+        pages.push({ section: sec, name: 'ブログ一覧ページ', type: 'blog-list' });
+        pages.push({ section: sec, name: 'ブログ詳細ページ', type: 'blog-detail' });
+      }
+      if (h.err)  pages.push({ section: sec, name: '404ページ',            type: 'error' });
+      if (h.form) pages.push({ section: sec, name: 'お問い合わせフォーム', type: 'form'  });
+      var spq = h.specialtyPages || 0;
+      for (var spi = 0; spi < spq; spi++)
+        pages.push({ section: sec, name: '専門診療ページ ' + (spi + 1), type: 'specialty' });
+      var brq = h.branchCount || 0;
+      for (var bri = 0; bri < brq; bri++)
+        pages.push({ section: sec, name: '分院TOPページ ' + (bri + 1), type: 'branch-top' });
+      // クライアント名をmetaに合わせる
+      if (!data.meta) data.meta = {};
+      if (!data.meta.client) data.meta.client = data.client || '';
+    }
+
     if (pages.length === 0) {
-      figma.notify('ページ情報（siteMap）がありません', { error: true });
+      figma.notify('ページ情報が見つかりません。見積もりフォームまたはヒアリングフォームのJSONを貼り付けてください', { error: true });
       figma.closePlugin();
       return;
     }
