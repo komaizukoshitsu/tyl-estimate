@@ -1276,6 +1276,14 @@ function exportJSON(){
     }
     if(c.adat.errq>0) siteMap.push({section:'病院サイト',name:'404ページ',type:'error'});
     if(c.adat.frmq>0) siteMap.push({section:'病院サイト',name:'お問い合わせフォーム',type:'form'});
+    // 専門診療ページ
+    const spq2=parseInt($('extsp')?.value||0);
+    for(let i=0;i<spq2;i++)
+      siteMap.push({section:'病院サイト',name:'専門診療ページ '+(i+1),type:'specialty'});
+    // 分院TOPページ
+    const brq2=parseInt($('extbr')?.value||0);
+    for(let i=0;i<brq2;i++)
+      siteMap.push({section:'病院サイト',name:'分院TOPページ '+(i+1),type:'branch-top'});
   }
 
   if(c.bdat){
@@ -1323,7 +1331,13 @@ function exportJSON(){
     migration:{permalink:c.permv>0,contentAdjust:c.postq,serverCheck:!!c.svr,nonWPMigration:!!c.nwp,multiSiteMerge:!!c.mrg,branchMultiSite:!!c.mnw},
     maintenance:{plan:c.mop>0?c.molbl:null,monthlyFee:c.mop},
     siteMap:siteMap,
-    totals:{subtotal:c.grand,tax:c.tax,total:c.tot}
+    totals:{subtotal:c.grand,tax:c.tax,total:c.tot},
+    design:(()=>{
+      try{
+        const h=JSON.parse(localStorage.getItem('hearingData')||'{}');
+        return h.design||null;
+      }catch(e){ return null; }
+    })()
   };
 
   const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
