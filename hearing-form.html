@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>サイト制作 仕様ヒアリング｜こまゐ図考室</title>
+<style>
+:root{
+  --primary:#2c5f6e;--pl:#3d7a8a;--accent:#e8a44a;--al:#f5c87a;
+  --bg:#f5f3ef;--card:#fff;--border:#ddd8d0;--text:#2a2a2a;--sub:#666;
+  --success:#4caf93;--r:14px;--shadow:0 2px 16px rgba(0,0,0,.08);
+  --ta1:#5b87c5;--ta2:#2ecc71;--ta3:#9b59b6;--tb:#e67e22;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Hiragino Sans','Meiryo',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.7;min-height:100vh}
+header{background:var(--primary);color:#fff;padding:18px 28px;display:flex;align-items:baseline;gap:12px}
+.hl{font-size:20px;font-weight:700;letter-spacing:.04em}.hl span{color:var(--al)}
+.hl-sub{font-size:12px;opacity:.75}
+
+/* ウィザード全体 */
+.wz{max-width:720px;margin:0 auto;padding:28px 16px 80px}
+
+/* プログレスバー */
+.prog-wrap{margin-bottom:24px}
+.prog-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.prog-title{font-size:17px;font-weight:700;color:var(--primary)}
+.prog-count{font-size:12px;color:var(--sub)}
+.prog-bar{height:6px;background:#e0dbd3;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:var(--primary);border-radius:3px;transition:width .35s ease}
+
+/* ステップパネル */
+.sp{display:none}
+.sp.active{display:block}
+.sp-card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:28px 32px;margin-bottom:16px}
+.sp-h{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid var(--border)}
+
+/* フォームパーツ */
+.fr{margin-bottom:16px}
+label.lbl{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:5px}
+.req{color:#e74c3c;margin-left:2px}
+input[type=text],input[type=number],textarea{
+  width:100%;border:1.5px solid var(--border);border-radius:8px;
+  padding:9px 12px;font-size:13px;font-family:inherit;background:#fafaf8;
+  color:var(--text);outline:none;transition:border-color .2s
+}
+input:focus,textarea:focus{border-color:var(--pl);background:#fff}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+@media(max-width:500px){.fr2{grid-template-columns:1fr}}
+
+/* ラジオ・トグル */
+.radio-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+.radio-card{
+  border:2px solid var(--border);border-radius:10px;
+  padding:10px 16px;cursor:pointer;transition:all .18s;
+  display:flex;align-items:center;gap:7px;font-size:13px;
+  background:#fff
+}
+.radio-card:hover{border-color:var(--pl)}
+.radio-card.sel{border-color:var(--primary);background:#eef4f6;font-weight:600}
+.radio-card input{display:none}
+
+/* プラン大カード */
+.plan-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.plan-grid{grid-template-columns:1fr}}
+.plan-card{
+  border:2px solid var(--border);border-radius:12px;padding:16px 18px;
+  cursor:pointer;transition:all .18s;background:#fff;position:relative
+}
+.plan-card:hover{border-color:var(--pl);box-shadow:0 4px 12px rgba(44,95,110,.12)}
+.plan-card.sel{border-color:var(--primary);background:#eef4f6}
+.plan-card input{display:none}
+.plan-card .pt{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;color:#fff;margin-bottom:6px}
+.pta1{background:var(--ta1)}.pta2{background:var(--ta2)}.pta3{background:var(--ta3)}.ptb{background:var(--tb)}
+.plan-card h3{font-size:13px;font-weight:700;margin-bottom:3px;line-height:1.4}
+.plan-card p{font-size:11px;color:var(--sub)}
+.plan-card .price-hint{font-size:11px;color:var(--pl);font-weight:600;margin-top:6px}
+.plan-wide{grid-column:1/-1}
+.chk{position:absolute;top:10px;right:12px;width:18px;height:18px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;opacity:0;transition:opacity .2s}
+.plan-card.sel .chk{opacity:1}
+
+/* チェックボックスグリッド */
+.chk-grid{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chk-item{
+  display:flex;align-items:center;gap:6px;
+  border:1.5px solid var(--border);border-radius:8px;padding:6px 12px;
+  cursor:pointer;font-size:12px;background:#fff;transition:border-color .15s
+}
+.chk-item:hover{border-color:var(--pl)}
+.chk-item input{accent-color:var(--primary);width:14px;height:14px;cursor:pointer}
+
+/* トグルスイッチ */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eeece8}
+.toggle-row:last-child{border-bottom:none}
+.toggle-label{font-size:13px}
+.toggle-sub{font-size:11px;color:var(--sub);display:block;margin-top:1px}
+.toggle-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sw{position:relative;width:40px;height:22px;cursor:pointer}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw-track{position:absolute;inset:0;background:#ccc;border-radius:11px;transition:.2s}
+.sw input:checked+.sw-track{background:var(--primary)}
+.sw-thumb{position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:3px;left:3px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw input:checked~.sw-thumb{transform:translateX(18px)}
+.small-num{width:68px;font-size:12px;padding:5px 8px;text-align:center}
+
+/* セクション内ラベル */
+.sec-lbl{font-size:11px;font-weight:700;color:var(--sub);letter-spacing:.06em;text-transform:uppercase;padding:12px 0 6px;border-bottom:1px solid var(--border);margin-bottom:8px}
+
+/* ノート */
+.nb{background:#fff8ec;border-left:3px solid var(--accent);border-radius:5px;padding:8px 12px;font-size:11px;color:#7a5c1e;margin-top:10px}
+.nb.info{background:#eef4f6;border-color:var(--primary);color:#2c4f5e}
+
+/* 確認サマリー */
+.sum-section{margin-bottom:16px}
+.sum-title{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:.05em;text-transform:uppercase;border-bottom:1px solid var(--border);padding-bottom:5px;margin-bottom:8px}
+.sum-row{display:flex;gap:8px;font-size:13px;padding:4px 0}
+.sum-label{color:var(--sub);width:130px;flex-shrink:0;font-size:12px}
+.sum-val{font-weight:500;flex:1}
+.sum-tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:700;color:#fff;margin-right:4px}
+.page-pill{display:inline-block;background:#eef4f6;border:1px solid #c5d8de;border-radius:6px;padding:2px 8px;font-size:11px;margin:2px 3px 2px 0;color:var(--primary)}
+
+/* ナビゲーション */
+.nav{display:flex;gap:10px;margin-top:20px;position:sticky;bottom:20px}
+.btn-back{flex:0 0 auto;background:transparent;color:var(--sub);border:2px solid var(--border);border-radius:10px;padding:11px 20px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-back:hover{border-color:var(--primary);color:var(--primary)}
+.btn-next{flex:1;background:var(--primary);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn-next:hover{background:var(--pl)}
+.btn-out{flex:1;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .2s}
+.btn-out:hover{background:#d4922e}
+.btn-dl{flex:0 0 auto;background:transparent;color:var(--primary);border:2px solid var(--primary);border-radius:10px;padding:11px 18px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-dl:hover{background:var(--primary);color:#fff}
+
+/* エラー */
+.err{font-size:12px;color:#e74c3c;margin-top:5px;display:none}
+
+/* A-typeサブ選択 */
+.atype-wrap{margin-top:14px;padding:14px;background:#f5f3ef;border-radius:10px;border:1px dashed var(--border)}
+.atype-wrap h4{font-size:12px;font-weight:700;color:var(--sub);margin-bottom:10px}
+.atype-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:500px){.atype-grid{grid-template-columns:1fr}}
+.atype-card{border:2px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;text-align:center;font-size:12px;background:#fff;transition:all .18s}
+.atype-card:hover{border-color:var(--pl)}
+.atype-card.sel{border-color:var(--primary);background:#eef4f6;font-weight:700}
+.atype-card .pt{display:block;margin:0 auto 5px}
+/* 必須固定項目 */
+.must-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #eeece8;background:#fafdf9}
+.must-row:last-child{border-bottom:none}
+.must-badge{font-size:11px;font-weight:700;color:#3d9a72;background:#f0faf6;border:1.5px solid #3d9a72;border-radius:8px;padding:3px 10px;flex-shrink:0;white-space:nowrap}
+/* TOPページ常設表示 */
+.always-page{display:flex;align-items:center;gap:10px;padding:10px 14px;background:#eef4f6;border-radius:8px;border:1.5px solid #c5d8de;margin-bottom:8px;color:var(--primary);font-size:13px;font-weight:600}
+.always-page .must-badge{margin-left:auto}
+</style>
+</head>
+<body>
+<header>
+  <div class="hl">こまゐ<span>図考室</span></div>
+  <div class="hl-sub">サイト制作 仕様ヒアリングフォーム</div>
+</header>
+
+<div class="wz">
+  <!-- プログレス -->
+  <div class="prog-wrap">
+    <div class="prog-head">
+      <span class="prog-title" id="prog-title">STEP 1　基本情報</span>
+      <span class="prog-count" id="prog-count">1 / 6</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:16%"></div></div>
+  </div>
+
+  <!-- ─── STEP 1: 基本情報 ─── -->
+  <div class="sp active" id="sp1">
+    <div class="sp-card">
+      <div class="sp-h">基本情報</div>
+      <div class="fr2">
+        <div>
+          <label class="lbl">医院・施設名<span class="req">*</span></label>
+          <input type="text" id="h-client" placeholder="〇〇クリニック">
+          <div class="err" id="err-client">施設名を入力してください</div>
+        </div>
+        <div>
+          <label class="lbl">担当者名</label>
+          <input type="text" id="h-contact" placeholder="田中 花子">
+        </div>
+      </div>
+      <div class="fr">
+        <label class="lbl">プロジェクトの種別<span class="req">*</span></label>
+        <div class="radio-row">
+          <label class="radio-card sel" id="rc-new">
+            <input type="radio" name="renewal" value="new" checked onchange="setRenewal(false)">
+            🆕 新規サイト制作
+          </label>
+          <label class="radio-card" id="rc-rnw">
+            <input type="radio" name="renewal" value="renewal" onchange="setRenewal(true)">
+            🔄 既存サイトのリニューアル
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 2: サイト構成 ─── -->
+  <div class="sp" id="sp2">
+    <div class="sp-card">
+      <div class="sp-h">どのサイトを制作しますか？</div>
+      <div class="plan-grid">
+        <label class="plan-card" id="pc-a1" onclick="setPlan('a1',this)">
+          <input type="radio" name="plan">
+          <div class="pt pta1">A-1</div>
+          <h3>病院サイト<br>テンプレートデザイン</h3>
+          <p>WordPressテーマ使用。低コスト・短納期。</p>
+          <div class="price-hint">参考目安：30〜50万円〜</div>
+          <div class="chk">✓</div>
+        </label>
+        <label class="plan-card" id="pc-a2" onclick="setPlan('a2',this)">
+          <input type="radio" name="plan">
+          <div class="pt pta2">A-2</div>
+          <h3>病院サイト<br>セミカスタムデザイン</h3>
+          <p>テーマをベースに一部カスタマイズ。</p>
+          <div class="price-hint">参考目安：45〜70万円〜</div>
+          <div class="chk">✓</div>
+        </label>
+        <label class="plan-card" id="pc-a3" onclick="setPlan('a3',this)">
+          <input type="radio" name="plan">
+          <div class="pt pta3">A-3</div>
+          <h3>病院サイト<br>完全オリジナルデザイン</h3>
+          <p>フルオリジナル。高品質・独自性重視。</p>
+          <div class="price-hint">参考目安：100万円〜</div>
+          <div class="chk">✓</div>
+        </label>
+        <label class="plan-card" id="pc-b" onclick="setPlan('b',this)">
+          <input type="radio" name="plan">
+          <div class="pt ptb">B</div>
+          <h3>採用サイト<br>STUDIOテンプレート</h3>
+          <p>STUDIO使用。スピード重視。</p>
+          <div class="price-hint">参考目安：25〜40万円〜</div>
+          <div class="chk">✓</div>
+        </label>
+        <label class="plan-card plan-wide" id="pc-ab" onclick="setPlan('ab',this)">
+          <input type="radio" name="plan">
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
+            <div class="pt pta1" style="margin:0">A</div>
+            <span style="font-weight:700;color:var(--sub)">＋</span>
+            <div class="pt ptb" style="margin:0">B</div>
+          </div>
+          <h3>病院サイト＋採用サイト セット</h3>
+          <p>A-1/A-2/A-3 いずれか＋採用サイト。Bの進行管理費（10,000円）を割引。</p>
+          <div class="chk">✓</div>
+        </label>
+      </div>
+      <!-- A+B の場合のAタイプ選択 -->
+      <div class="atype-wrap" id="atype-wrap" style="display:none">
+        <h4>病院サイト（A）のプランを選択してください</h4>
+        <div class="atype-grid">
+          <div class="atype-card" id="at-a1" onclick="setAType('a1')">
+            <span class="pt pta1">A-1</span>テンプレート
+          </div>
+          <div class="atype-card" id="at-a2" onclick="setAType('a2')">
+            <span class="pt pta2">A-2</span>セミカスタム
+          </div>
+          <div class="atype-card" id="at-a3" onclick="setAType('a3')">
+            <span class="pt pta3">A-3</span>フルオリジナル
+          </div>
+        </div>
+      </div>
+      <div class="err" id="err-plan">プランを選択してください</div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 3: 病院サイト ページ構成 ─── -->
+  <div class="sp" id="sp3">
+    <div class="sp-card">
+      <div class="sp-h" id="sp3-title">病院サイト — ページ構成</div>
+
+      <div class="sec-lbl">ページ構成</div>
+      <!-- TOPページは必ず含まれる -->
+      <div class="always-page">
+        <span>🏠</span><span>TOPページ</span>
+        <span class="must-badge">必ず含まれます</span>
+      </div>
+      <div class="nb info" style="margin-bottom:10px">その他に必要なページにチェックを入れてください。チェック数が見積もりに反映されます。</div>
+      <div class="chk-grid" id="hosp-fp-chks">
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="初診の方へページ"> 初診の方へ</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="診療案内ページ"> 診療案内</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="病院紹介ページ"> 病院紹介</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="アクセスページ"> アクセス</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="スタッフ紹介ページ"> スタッフ紹介</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="院長紹介ページ"> 院長紹介</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="設備・施設紹介ページ"> 設備・施設紹介</label>
+        <label class="chk-item"><input type="checkbox" class="hfp-chk" value="よくある質問ページ"> よくある質問</label>
+      </div>
+      <div class="fr" style="margin-top:8px">
+        <label class="lbl">その他のページ（カンマ区切りで記入）</label>
+        <input type="text" id="hosp-fp-extra" placeholder="例：採用情報, 個人情報保護方針">
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">ブログ・お知らせ</div>
+      <div class="toggle-row">
+        <div>
+          <span class="toggle-label">ブログ・お知らせ機能</span>
+          <span class="toggle-sub">投稿一覧・詳細ページを制作します</span>
+        </div>
+        <div class="toggle-right">
+          <label class="sw" id="sw-hblog">
+            <input type="checkbox" id="h-blog" checked onchange="toggleBlogCount()">
+            <div class="sw-track"></div><div class="sw-thumb"></div>
+          </label>
+        </div>
+      </div>
+      <div id="blog-count-row" style="padding:10px 0 4px;display:flex;align-items:center;gap:12px">
+        <span style="font-size:12px;color:var(--sub)">投稿カテゴリー数（SEO対象）</span>
+        <input type="number" class="small-num" id="h-blog-cat" value="1" min="0" max="9">
+        <span style="font-size:11px;color:var(--sub)">カテゴリー</span>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">その他ページ</div>
+      <div class="toggle-row">
+        <div>
+          <span class="toggle-label">お問い合わせフォーム</span>
+          <span class="toggle-sub">ContactForm7等でフォームページを制作</span>
+        </div>
+        <label class="sw"><input type="checkbox" id="h-form" checked><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <span class="toggle-label">404エラーページ</span>
+          <span class="toggle-sub">カスタムエラーページを制作</span>
+        </div>
+        <label class="sw"><input type="checkbox" id="h-err" checked><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">専門診療ページ</div>
+      <div class="toggle-row">
+        <div>
+          <span class="toggle-label">専門診療ページが必要ですか？</span>
+          <span class="toggle-sub">特定の診療科・疾患に特化したページを制作（30,000円/p）</span>
+        </div>
+        <label class="sw"><input type="checkbox" id="h-spec" onchange="toggleSpecCount()"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div id="spec-count-row" style="padding:8px 0 4px;display:none;align-items:center;gap:12px">
+        <span style="font-size:12px;color:var(--sub)">ページ数</span>
+        <input type="number" class="small-num" id="h-spec-q" value="1" min="1" max="20">
+        <span style="font-size:11px;color:var(--sub)">p</span>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">分院・系列クリニック</div>
+      <div class="toggle-row">
+        <div>
+          <span class="toggle-label">分院・系列クリニックがありますか？</span>
+          <span class="toggle-sub">分院TOPページ（30,000円/院）＋分院マルチサイト設定（45,000円）が追加されます</span>
+        </div>
+        <label class="sw"><input type="checkbox" id="h-branch" onchange="toggleBranchCount()"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div id="branch-count-row" style="padding:8px 0 4px;display:none;align-items:center;gap:12px">
+        <span style="font-size:12px;color:var(--sub)">分院数</span>
+        <input type="number" class="small-num" id="h-branch-q" value="1" min="1" max="10">
+        <span style="font-size:11px;color:var(--sub)">院</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 4: 採用サイト ページ構成 ─── -->
+  <div class="sp" id="sp4">
+    <div class="sp-card">
+      <div class="sp-h">採用サイト（B）— ページ構成</div>
+
+      <div class="sec-lbl">固定ページ</div>
+      <div class="chk-grid">
+        <label class="chk-item"><input type="checkbox" class="bfp-chk" value="会社概要ページ"> 会社概要</label>
+        <label class="chk-item"><input type="checkbox" class="bfp-chk" value="募集要項ページ"> 募集要項</label>
+        <label class="chk-item"><input type="checkbox" class="bfp-chk" value="仕事紹介ページ"> 仕事紹介</label>
+        <label class="chk-item"><input type="checkbox" class="bfp-chk" value="社員インタビューページ"> 社員インタビュー</label>
+        <label class="chk-item"><input type="checkbox" class="bfp-chk" value="職場環境ページ"> 職場環境</label>
+      </div>
+      <div class="fr" style="margin-top:8px">
+        <label class="lbl">その他の固定ページ（カンマ区切り）</label>
+        <input type="text" id="rec-fp-extra" placeholder="例：福利厚生, 代表メッセージ">
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">投稿・ブログ</div>
+      <div class="nb info" style="margin-bottom:10px">投稿タイプのカテゴリーを選んでください（各タイプで一覧＋詳細を制作）</div>
+      <div class="chk-grid">
+        <label class="chk-item"><input type="checkbox" class="bps-chk" value="おしらせ"> おしらせ</label>
+        <label class="chk-item"><input type="checkbox" class="bps-chk" value="コラム"> コラム</label>
+        <label class="chk-item"><input type="checkbox" class="bps-chk" value="インタビュー"> インタビュー</label>
+        <label class="chk-item"><input type="checkbox" class="bps-chk" value="募集要項詳細"> 募集要項詳細</label>
+      </div>
+      <div class="fr" style="margin-top:8px">
+        <label class="lbl">その他の投稿カテゴリー（カンマ区切り）</label>
+        <input type="text" id="rec-ps-extra" placeholder="例：スタッフブログ, 現場レポート">
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">その他ページ</div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">投稿一覧ページ</span><span class="toggle-sub">全カテゴリー共通の一覧ページ</span></div>
+        <label class="sw"><input type="checkbox" id="rec-plist" checked><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">お問い合わせフォーム</span></div>
+        <label class="sw"><input type="checkbox" id="rec-form" checked><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">プライバシーポリシー</span></div>
+        <label class="sw"><input type="checkbox" id="rec-priv" checked><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+      <div class="toggle-row">
+        <div><span class="toggle-label">404エラーページ</span></div>
+        <label class="sw"><input type="checkbox" id="rec-err"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 5: オプション・保守 ─── -->
+  <div class="sp" id="sp5">
+    <div class="sp-card">
+      <div class="sp-h">オプション・保守</div>
+
+      <div class="sec-lbl">SEO・品質オプション</div>
+      <div class="nb info" style="margin-bottom:10px">以下は全プランに必ず含まれます。</div>
+      <div class="must-row">
+        <div><span class="toggle-label">ローカルSEO設定</span><span class="toggle-sub">Googleビジネスプロフィール連携、構造化データ</span></div>
+        <span class="must-badge">✓ 必須</span>
+      </div>
+      <div class="must-row" id="opt-pspeed-row">
+        <div><span class="toggle-label">PageSpeed最適化</span><span class="toggle-sub">Core Web Vitals改善、画像・JS最適化</span></div>
+        <span class="must-badge">✓ 必須</span>
+      </div>
+      <div class="must-row">
+        <div>
+          <span class="toggle-label">文章制作</span>
+          <span class="toggle-sub">ページ本文のライティング代行（150,000円/式）</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <input type="number" class="small-num" id="opt-copy-q" value="1" min="1" max="5">
+          <span style="font-size:11px;color:var(--sub)">式</span>
+          <span class="must-badge">✓ 必須</span>
+        </div>
+      </div>
+
+      <!-- リニューアル時オプション -->
+      <div id="renewal-opts" style="display:none">
+        <div class="sec-lbl" style="margin-top:4px">移行・リニューアル対応</div>
+        <div class="must-row">
+          <div><span class="toggle-label">パーマリンク統一・リダイレクト設定</span><span class="toggle-sub">旧URLから新URLへ301リダイレクト設定（10,000円）</span></div>
+          <span class="must-badge">✓ 必須</span>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <span class="toggle-label">コンテンツ調整</span>
+            <span class="toggle-sub">既存記事・テキストの移行・修正（650円/記事）</span>
+          </div>
+          <div class="toggle-right">
+            <label class="sw"><input type="checkbox" id="mig-cont-sw" onchange="toggleContCount()"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+          </div>
+        </div>
+        <div id="cont-count-row" style="padding:8px 0;display:none;align-items:center;gap:12px">
+          <span style="font-size:12px;color:var(--sub)">調整記事数</span>
+          <input type="number" class="small-num" id="mig-cont-q" value="10" min="1">
+          <span style="font-size:11px;color:var(--sub)">記事</span>
+        </div>
+        <div class="toggle-row">
+          <div><span class="toggle-label">サーバー環境調査・調整</span><span class="toggle-sub">既存サーバーの適合確認（別途見積もり）</span></div>
+          <label class="sw"><input type="checkbox" id="mig-svr"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+        <div class="toggle-row">
+          <div><span class="toggle-label">マルチサイト統合</span><span class="toggle-sub">複数サイトを1つのWPに統合（60,000円）</span></div>
+          <label class="sw"><input type="checkbox" id="mig-mrg"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="sec-lbl" style="margin-top:4px">保守プラン（公開後・月額）</div>
+      <div class="radio-row" style="flex-direction:column;gap:6px">
+        <label class="radio-card sel" id="mnt-none-lbl">
+          <input type="radio" name="mnt" value="none" checked onchange="setMnt('none')">
+          なし（自社管理）
+        </label>
+        <label class="radio-card" id="mnt-light-lbl">
+          <input type="radio" name="mnt" value="light" onchange="setMnt('light')">
+          ライトプラン — 7,000円/月（定期更新・軽微な修正）
+        </label>
+        <label class="radio-card" id="mnt-std-lbl">
+          <input type="radio" name="mnt" value="standard" onchange="setMnt('standard')">
+          スタンダードプラン — 18,000円/月（定期更新・月次レポート・SEO管理）
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── STEP 6: 確認・出力 ─── -->
+  <div class="sp" id="sp6">
+    <div class="sp-card">
+      <div class="sp-h">内容の確認</div>
+      <div id="summary-body"><!-- JS で生成 --></div>
+      <div class="nb info" style="margin-top:12px">
+        「見積もりフォームで確認」を押すと、このヒアリング内容が見積もりフォームに自動入力されます。
+      </div>
+    </div>
+  </div>
+
+  <!-- ナビゲーションボタン -->
+  <div class="nav" id="nav-btns">
+    <button class="btn-back" id="btn-back" onclick="prevStep()" style="display:none">← 戻る</button>
+    <button class="btn-next" id="btn-next" onclick="nextStep()">次へ →</button>
+  </div>
+</div>
+
+<script>
+// ── 状態管理 ────────────────────────────────────────────────────
+const H = {
+  client:'', contact:'', isRenewal:false,
+  plan:'', aType:'',
+  hospital:{ fixedPages:[], extraPages:'', blog:true, blogCategories:1, form:true, err:true,
+             specialtyPages:0, branchCount:0 },
+  recruit:{ fixedPages:[], extraPages:'', postCategories:[], extraPostCategories:'', postList:true, form:true, privacy:true, err:false },
+  options:{ localSEO:true, pageSpeed:true, copywriting:1 },
+  migration:{ permalink:false, contentAdjust:0, serverCheck:false, multiSiteMerge:false, branchMultiSite:false },
+  maintenance:'none'
+};
+
+// ── ステップ定義 ──────────────────────────────────────────────────
+const ALL_STEPS = [
+  { id:'sp1', title:'基本情報' },
+  { id:'sp2', title:'サイト構成' },
+  { id:'sp3', title:'病院サイト ページ構成', show:()=>isHosp() },
+  { id:'sp4', title:'採用サイト ページ構成', show:()=>isRec() },
+  { id:'sp5', title:'オプション・保守' },
+  { id:'sp6', title:'確認・出力' },
+];
+
+function isHosp(){ return ['a1','a2','a3','ab'].includes(H.plan); }
+function isRec(){  return ['b','ab'].includes(H.plan); }
+
+function visibleSteps(){
+  return ALL_STEPS.filter(s => !s.show || s.show());
+}
+
+let curIdx = 0;
+
+function goTo(idx){
+  const vs = visibleSteps();
+  if(idx < 0 || idx >= vs.length) return;
+  document.querySelectorAll('.sp').forEach(el=>el.classList.remove('active'));
+  document.getElementById(vs[idx].id).classList.add('active');
+  curIdx = idx;
+  // プログレス更新
+  const pct = Math.round(((idx+1)/vs.length)*100);
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-title').textContent = 'STEP '+(idx+1)+'　'+vs[idx].title;
+  document.getElementById('prog-count').textContent = (idx+1)+' / '+vs.length;
+  // ボタン
+  document.getElementById('btn-back').style.display = idx===0 ? 'none':'block';
+  const isLast = idx === vs.length-1;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent = isLast ? '' : '次へ →';
+  if(isLast){
+    buildSummary();
+    // 最終ステップは出力ボタン2つに変更
+    document.getElementById('nav-btns').innerHTML =
+      '<button class="btn-back" onclick="prevStep()">← 戻る</button>'+
+      '<button class="btn-dl" onclick="downloadJSON()">📥 JSONをダウンロード</button>'+
+      '<button class="btn-out" onclick="goToEstimate()">📊 見積もりフォームで確認 →</button>';
+  }
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function nextStep(){
+  if(!validateStep()) return;
+  collectStep();
+  const vs = visibleSteps();
+  if(curIdx + 1 < vs.length) goTo(curIdx+1);
+}
+
+function prevStep(){
+  if(curIdx > 0) goTo(curIdx-1);
+}
+
+// ── バリデーション ────────────────────────────────────────────────
+function validateStep(){
+  const vs = visibleSteps();
+  const sid = vs[curIdx].id;
+  if(sid==='sp1'){
+    const v = document.getElementById('h-client').value.trim();
+    document.getElementById('err-client').style.display = v ? 'none':'block';
+    return !!v;
+  }
+  if(sid==='sp2'){
+    const ok = !!H.plan && (H.plan!=='ab' || !!H.aType);
+    document.getElementById('err-plan').style.display = ok ? 'none':'block';
+    return ok;
+  }
+  return true;
+}
+
+// ── 各ステップのデータ収集 ────────────────────────────────────────
+function collectStep(){
+  const vs = visibleSteps();
+  const sid = vs[curIdx].id;
+  if(sid==='sp1'){
+    H.client  = document.getElementById('h-client').value.trim();
+    H.contact = document.getElementById('h-contact').value.trim();
+  }
+  if(sid==='sp3'){
+    H.hospital.fixedPages = [...document.querySelectorAll('.hfp-chk:checked')].map(el=>el.value);
+    H.hospital.extraPages = document.getElementById('hosp-fp-extra').value.trim();
+    H.hospital.blog       = document.getElementById('h-blog').checked;
+    H.hospital.blogCategories = parseInt(document.getElementById('h-blog-cat').value)||1;
+    H.hospital.form       = document.getElementById('h-form').checked;
+    H.hospital.err        = document.getElementById('h-err').checked;
+    H.hospital.specialtyPages = document.getElementById('h-spec').checked
+      ? (parseInt(document.getElementById('h-spec-q').value)||1) : 0;
+    H.hospital.branchCount = document.getElementById('h-branch').checked
+      ? (parseInt(document.getElementById('h-branch-q').value)||1) : 0;
+  }
+  if(sid==='sp4'){
+    H.recruit.fixedPages         = [...document.querySelectorAll('.bfp-chk:checked')].map(el=>el.value);
+    H.recruit.extraPages         = document.getElementById('rec-fp-extra').value.trim();
+    H.recruit.postCategories     = [...document.querySelectorAll('.bps-chk:checked')].map(el=>el.value);
+    H.recruit.extraPostCategories = document.getElementById('rec-ps-extra').value.trim();
+    H.recruit.postList  = document.getElementById('rec-plist').checked;
+    H.recruit.form      = document.getElementById('rec-form').checked;
+    H.recruit.privacy   = document.getElementById('rec-priv').checked;
+    H.recruit.err       = document.getElementById('rec-err').checked;
+  }
+  if(sid==='sp5'){
+    // SEO・品質オプションは常に必須
+    H.options.localSEO  = true;
+    H.options.pageSpeed = !['b'].includes(H.plan); // STUDIOはPageSpeed対象外
+    H.options.copywriting = parseInt(document.getElementById('opt-copy-q').value)||1;
+    if(H.isRenewal){
+      H.migration.permalink     = true; // リニューアル時は必須
+      H.migration.contentAdjust = document.getElementById('mig-cont-sw').checked
+        ? (parseInt(document.getElementById('mig-cont-q').value)||0) : 0;
+      H.migration.serverCheck     = document.getElementById('mig-svr').checked;
+      H.migration.multiSiteMerge  = document.getElementById('mig-mrg').checked;
+    }
+    // 分院マルチサイトはSTEP3の入力から決まる
+    H.migration.branchMultiSite = H.hospital.branchCount > 0;
+  }
+}
+
+// ── プラン選択 ────────────────────────────────────────────────────
+function setPlan(p, el){
+  H.plan = p; H.aType = '';
+  ['a1','a2','a3','b','ab'].forEach(x=>document.getElementById('pc-'+x)?.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('atype-wrap').style.display = p==='ab'?'block':'none';
+  document.getElementById('err-plan').style.display = 'none';
+  // PageSpeed最適化はBプランのみでは非表示（STUDIOなので）
+  document.getElementById('opt-pspeed-row').style.display = p==='b'?'none':'flex';
+}
+
+function setAType(t){
+  H.aType = t;
+  ['a1','a2','a3'].forEach(x=>document.getElementById('at-'+x)?.classList.remove('sel'));
+  document.getElementById('at-'+t)?.classList.add('sel');
+  // sp3のタイトル更新
+  const labels = {a1:'A-1 テンプレート',a2:'A-2 セミカスタム',a3:'A-3 フルオリジナル'};
+  const el = document.getElementById('sp3-title');
+  if(el) el.textContent = '病院サイト（'+labels[t]+'）— ページ構成';
+}
+
+function setRenewal(v){
+  H.isRenewal = v;
+  document.getElementById('rc-new').classList.toggle('sel', !v);
+  document.getElementById('rc-rnw').classList.toggle('sel',  v);
+  document.getElementById('renewal-opts').style.display = v?'block':'none';
+}
+function setMnt(v){
+  H.maintenance=v;
+  ['none','light','std'].forEach(x=>document.getElementById('mnt-'+x+'-lbl')?.classList.remove('sel'));
+  document.getElementById('mnt-'+v+'-lbl')?.classList.add('sel');
+}
+
+function toggleBlogCount(){
+  const on = document.getElementById('h-blog').checked;
+  document.getElementById('blog-count-row').style.display = on?'flex':'none';
+}
+function toggleCopyCount(){
+  const on = document.getElementById('opt-copy-sw').checked;
+  document.getElementById('copy-count-row').style.display = on?'flex':'none';
+}
+function toggleContCount(){
+  const on = document.getElementById('mig-cont-sw').checked;
+  document.getElementById('cont-count-row').style.display = on?'flex':'none';
+}
+function toggleSpecCount(){
+  const on = document.getElementById('h-spec').checked;
+  document.getElementById('spec-count-row').style.display = on?'flex':'none';
+}
+function toggleBranchCount(){
+  const on = document.getElementById('h-branch').checked;
+  document.getElementById('branch-count-row').style.display = on?'flex':'none';
+}
+
+// ── サマリー生成 ─────────────────────────────────────────────────
+function buildSummary(){
+  collectStep(); // 最終ステップのデータも収集
+
+  const planLabels = {
+    a1:'A-1 テンプレートデザイン', a2:'A-2 セミカスタムデザイン',
+    a3:'A-3 フルオリジナルデザイン', b:'B STUDIOテンプレート',
+    ab:'A+B セット'
+  };
+  const atLabels = {a1:'A-1',a2:'A-2',a3:'A-3'};
+
+  function pill(t){ return `<span class="page-pill">${t}</span>`; }
+  function row(lbl,val){ return `<div class="sum-row"><span class="sum-label">${lbl}</span><span class="sum-val">${val}</span></div>`; }
+
+  let html = '';
+
+  // 基本情報
+  html += '<div class="sum-section"><div class="sum-title">基本情報</div>';
+  html += row('医院・施設名', H.client||'—');
+  html += row('担当者名',     H.contact||'—');
+  html += row('プロジェクト', H.isRenewal?'リニューアル':'新規制作');
+  html += row('プラン', `<span class="sum-tag ${H.plan.startsWith('a')?'pta'+H.plan.slice(-1):'ptb'}" style="background:${planTagColor(H.plan)}">${planLabels[H.plan]||H.plan}</span>`+(H.plan==='ab'&&H.aType?` <span class="sum-tag" style="background:#aaa">${atLabels[H.aType]}</span>`:''));
+  html += '</div>';
+
+  // 病院サイト
+  if(isHosp()){
+    html += '<div class="sum-section"><div class="sum-title">病院サイト ページ構成</div>';
+    const fp = [...H.hospital.fixedPages, ...(H.hospital.extraPages?H.hospital.extraPages.split(',').map(s=>s.trim()).filter(Boolean):[])];
+    html += row('固定ページ', fp.length>0 ? fp.map(pill).join('') : '（未選択）');
+    if(H.hospital.blog){
+      html += row('ブログ機能', '一覧・詳細ページ　カテゴリー'+H.hospital.blogCategories+'件');
+    } else {
+      html += row('ブログ機能', 'なし');
+    }
+    html += row('フォーム', H.hospital.form?'あり':'なし');
+    html += row('404ページ', H.hospital.err?'あり':'なし');
+    if(H.hospital.specialtyPages>0)
+      html += row('専門診療ページ', H.hospital.specialtyPages+'p（30,000円/p）');
+    if(H.hospital.branchCount>0)
+      html += row('分院', H.hospital.branchCount+'院（分院TOPページ＋マルチサイト設定）');
+    html += '</div>';
+  }
+
+  // 採用サイト
+  if(isRec()){
+    html += '<div class="sum-section"><div class="sum-title">採用サイト ページ構成</div>';
+    const bfp = [...H.recruit.fixedPages, ...(H.recruit.extraPages?H.recruit.extraPages.split(',').map(s=>s.trim()).filter(Boolean):[])];
+    html += row('固定ページ', bfp.length>0 ? bfp.map(pill).join('') : '（未選択）');
+    const bps = [...H.recruit.postCategories, ...(H.recruit.extraPostCategories?H.recruit.extraPostCategories.split(',').map(s=>s.trim()).filter(Boolean):[])];
+    html += row('投稿カテゴリー', bps.length>0 ? bps.map(pill).join('') : '（未選択）');
+    html += row('投稿一覧', H.recruit.postList?'あり':'なし');
+    html += row('フォーム', H.recruit.form?'あり':'なし');
+    html += row('プライバシーポリシー', H.recruit.privacy?'あり':'なし');
+    html += '</div>';
+  }
+
+  // オプション
+  // 必須項目
+  const mustOpts = ['ローカルSEO'];
+  if(H.options.pageSpeed) mustOpts.push('PageSpeed最適化');
+  mustOpts.push('文章制作×'+H.options.copywriting+'式');
+  if(H.isRenewal) mustOpts.push('パーマリンク統一');
+  // 任意項目
+  const opts = [];
+  if(H.migration.contentAdjust>0) opts.push('コンテンツ調整 '+H.migration.contentAdjust+'記事');
+  if(H.migration.serverCheck) opts.push('サーバー調査');
+  if(H.migration.multiSiteMerge) opts.push('マルチサイト統合');
+  if(H.migration.branchMultiSite) opts.push('分院マルチサイト設定');
+  html += '<div class="sum-section"><div class="sum-title">オプション・移行</div>';
+  html += row('必須オプション', mustOpts.map(t=>`<span class="page-pill" style="border-color:#3d9a72;color:#3d9a72">✓ ${t}</span>`).join(''));
+  html += row('追加オプション', opts.length>0 ? opts.map(pill).join('') : 'なし');
+  const mntLabel = {none:'なし',light:'ライト 7,000円/月',standard:'スタンダード 18,000円/月'};
+  html += row('保守プラン', mntLabel[H.maintenance]||'なし');
+  html += '</div>';
+
+  document.getElementById('summary-body').innerHTML = html;
+}
+
+function planTagColor(p){
+  if(p==='a1'||p==='ab') return '#5b87c5';
+  if(p==='a2') return '#2ecc71';
+  if(p==='a3') return '#9b59b6';
+  return '#e67e22';
+}
+
+// ── JSON出力 ────────────────────────────────────────────────────
+function buildJSON(){
+  const at = H.plan==='ab'?H.aType:H.plan.startsWith('a')?H.plan:null;
+  const fp_h = [...H.hospital.fixedPages,
+    ...(H.hospital.extraPages?H.hospital.extraPages.split(',').map(s=>s.trim()).filter(Boolean):[])];
+  const fp_b = [...H.recruit.fixedPages,
+    ...(H.recruit.extraPages?H.recruit.extraPages.split(',').map(s=>s.trim()).filter(Boolean):[])];
+  const ps_b = [...H.recruit.postCategories,
+    ...(H.recruit.extraPostCategories?H.recruit.extraPostCategories.split(',').map(s=>s.trim()).filter(Boolean):[])];
+  return {
+    version:'hearing-1.0',
+    client:H.client, contact:H.contact, isRenewal:H.isRenewal,
+    plan:H.plan, aType:at||null,
+    hospital: isHosp()?{
+      fixedPages:fp_h, blog:H.hospital.blog,
+      blogCategories:H.hospital.blog?H.hospital.blogCategories:0,
+      form:H.hospital.form, err:H.hospital.err,
+      specialtyPages:H.hospital.specialtyPages,
+      branchCount:H.hospital.branchCount
+    }:null,
+    recruit: isRec()?{
+      fixedPages:fp_b, postCategories:ps_b,
+      postList:H.recruit.postList, form:H.recruit.form,
+      privacy:H.recruit.privacy, err:H.recruit.err
+    }:null,
+    options:H.options,
+    migration:H.migration,
+    maintenance:H.maintenance,
+    generatedAt: new Date().toISOString()
+  };
+}
+
+function downloadJSON(){
+  const data = buildJSON();
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const cn = (H.client||'hearing').replace(/[^\w\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]/g,'_');
+  a.href = url; a.download = `hearing_${cn}_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function goToEstimate(){
+  const data = buildJSON();
+  localStorage.setItem('hearingData', JSON.stringify(data));
+  window.location.href = 'estimate-form.html';
+}
+
+// ── 初期化 ─────────────────────────────────────────────────────
+goTo(0);
+</script>
+</body>
+</html>

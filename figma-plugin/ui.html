@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+    background: #f5f3ef;
+    color: #2a2a2a;
+    font-size: 13px;
+    padding: 16px;
+  }
+  .header {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .header h2 { font-size: 15px; color: #2c5f6e; }
+  .sub { font-size: 11px; color: #888; margin-bottom: 12px; }
+
+  textarea {
+    width: 100%;
+    height: 240px;
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    border: 1.5px solid #ddd8d0;
+    border-radius: 8px;
+    padding: 10px;
+    resize: vertical;
+    background: #fff;
+    color: #2a2a2a;
+    line-height: 1.5;
+  }
+  textarea:focus { border-color: #2c5f6e; outline: none; }
+
+  .note {
+    font-size: 11px;
+    color: #666;
+    background: #fff8ec;
+    border-left: 3px solid #e8a44a;
+    padding: 6px 10px;
+    border-radius: 0 6px 6px 0;
+    margin: 10px 0 8px;
+    line-height: 1.6;
+  }
+  .note b { color: #7a5c1e; }
+
+  .info {
+    font-size: 11px; color: #2c5f6e;
+    background: #eef4f6; border-left: 3px solid #2c5f6e;
+    padding: 6px 10px; border-radius: 0 6px 6px 0;
+    margin-bottom: 12px;
+  }
+
+  .btns {
+    display: flex; gap: 8px; margin-top: 12px;
+  }
+  button {
+    flex: 1; padding: 11px;
+    border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    transition: background 0.2s;
+  }
+  .btn-main  { background: #2c5f6e; color: #fff; }
+  .btn-main:hover { background: #3d7a8a; }
+  .btn-main:disabled { background: #aac5cc; cursor: default; }
+  .btn-cancel {
+    background: transparent; color: #666;
+    border: 1.5px solid #ddd; flex: 0 0 90px;
+  }
+  .btn-cancel:hover { background: #eee; }
+
+  .status { font-size: 12px; color: #2c5f6e; margin-top: 8px; display: none; }
+  .error  { font-size: 12px; color: #e74c3c; margin-top: 8px; display: none; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span style="font-size:20px">📐</span>
+  <h2>見積もりWF生成</h2>
+</div>
+<p class="sub">見積もりフォームのJSONからワイヤーフレームを自動生成します</p>
+
+<div class="info">
+  見積もりフォームで <b>「📐 Figma用データ出力」</b> ボタンを押してJSONをダウンロード。<br>
+  そのファイルの中身をすべて貼り付けてください。
+</div>
+
+<textarea id="json-input"
+  placeholder='{
+  "version": "1.0",
+  "meta": { "client": "〇〇クリニック", ... },
+  "siteMap": [ ... ]
+}'></textarea>
+
+<div class="note">
+  <b>生成内容：</b> siteMapの各ページを 1440×960px のワイヤーフレームとして配置します。<br>
+  ヘッダー・コンテンツエリア・フッターの骨格が自動で入ります。
+</div>
+
+<p class="status" id="status"></p>
+<p class="error"  id="error"></p>
+
+<div class="btns">
+  <button class="btn-main" id="btn-gen" onclick="generate()">🖼️ ワイヤーフレームを生成</button>
+  <button class="btn-cancel" onclick="cancel()">キャンセル</button>
+</div>
+
+<script>
+  function generate() {
+    var raw = document.getElementById('json-input').value.trim();
+    var errEl  = document.getElementById('error');
+    var statEl = document.getElementById('status');
+    var btnEl  = document.getElementById('btn-gen');
+
+    errEl.style.display = 'none';
+    errEl.textContent = '';
+
+    if (!raw) {
+      errEl.textContent = '⚠️ JSONを貼り付けてください';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    var data;
+    try {
+      data = JSON.parse(raw);
+    } catch (e) {
+      errEl.textContent = '⚠️ JSON形式が正しくありません: ' + e.message;
+      errEl.style.display = 'block';
+      return;
+    }
+
+    if (!data.siteMap || data.siteMap.length === 0) {
+      errEl.textContent = '⚠️ ページ情報（siteMap）が見つかりません。プランを選択してから出力してください。';
+      errEl.style.display = 'block';
+      return;
+    }
+
+    btnEl.disabled = true;
+    statEl.textContent = '⏳ ' + data.siteMap.length + 'ページ生成中...';
+    statEl.style.display = 'block';
+
+    parent.postMessage({ pluginMessage: { type: 'generate', data: data } }, '*');
+  }
+
+  function cancel() {
+    parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+  }
+</script>
+</body>
+</html>
