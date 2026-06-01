@@ -232,14 +232,14 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
       <tr id="a1-blog-detail-row" style="display:none">
         <td colspan="4" style="padding:0">
           <div class="fp-detail">
-            <div class="fp-detail-label">投稿タイプ（記録用・価格には影響しません）</div>
+            <div class="fp-detail-label">投稿タイプ（チェック数＋追記数が数量に反映）</div>
             <div class="fp-chk-wrap">
-              <label class="fp-chk-item"><input type="checkbox"> おしらせ</label>
-              <label class="fp-chk-item"><input type="checkbox"> コラム</label>
-              <label class="fp-chk-item"><input type="checkbox"> ブログ</label>
-              <label class="fp-chk-item"><input type="checkbox"> 症例紹介</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a1blg-chk" oninput="syncFP('a1blgq','a1blg-chk','a1blg-extra')"> おしらせ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a1blg-chk" oninput="syncFP('a1blgq','a1blg-chk','a1blg-extra')"> コラム</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a1blg-chk" oninput="syncFP('a1blgq','a1blg-chk','a1blg-extra')"> ブログ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a1blg-chk" oninput="syncFP('a1blgq','a1blg-chk','a1blg-extra')"> 症例紹介</label>
             </div>
-            <input type="text" class="fp-extra-input" placeholder="その他のタイプ名（カンマ区切りで追記）">
+            <input type="text" id="a1blg-extra" class="fp-extra-input" placeholder="その他のタイプ名（カンマ区切りで追記　例：症例報告）" oninput="syncFP('a1blgq','a1blg-chk','a1blg-extra')">
           </div>
         </td>
       </tr>
@@ -308,14 +308,14 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
       <tr id="a2-blog-detail-row" style="display:none">
         <td colspan="4" style="padding:0">
           <div class="fp-detail">
-            <div class="fp-detail-label">投稿タイプ（記録用・価格には影響しません）</div>
+            <div class="fp-detail-label">投稿タイプ（チェック数＋追記数が数量に反映）</div>
             <div class="fp-chk-wrap">
-              <label class="fp-chk-item"><input type="checkbox"> おしらせ</label>
-              <label class="fp-chk-item"><input type="checkbox"> コラム</label>
-              <label class="fp-chk-item"><input type="checkbox"> ブログ</label>
-              <label class="fp-chk-item"><input type="checkbox"> 症例紹介</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a2blg-chk" oninput="syncFP('a2blgq','a2blg-chk','a2blg-extra')"> おしらせ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a2blg-chk" oninput="syncFP('a2blgq','a2blg-chk','a2blg-extra')"> コラム</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a2blg-chk" oninput="syncFP('a2blgq','a2blg-chk','a2blg-extra')"> ブログ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a2blg-chk" oninput="syncFP('a2blgq','a2blg-chk','a2blg-extra')"> 症例紹介</label>
             </div>
-            <input type="text" class="fp-extra-input" placeholder="その他のタイプ名（カンマ区切りで追記）">
+            <input type="text" id="a2blg-extra" class="fp-extra-input" placeholder="その他のタイプ名（カンマ区切りで追記　例：症例報告）" oninput="syncFP('a2blgq','a2blg-chk','a2blg-extra')">
           </div>
         </td>
       </tr>
@@ -382,14 +382,14 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
       <tr id="a3-blog-detail-row" style="display:none">
         <td colspan="4" style="padding:0">
           <div class="fp-detail">
-            <div class="fp-detail-label">投稿タイプ（記録用・価格には影響しません）</div>
+            <div class="fp-detail-label">投稿タイプ（チェック数＋追記数が数量に反映）</div>
             <div class="fp-chk-wrap">
-              <label class="fp-chk-item"><input type="checkbox"> おしらせ</label>
-              <label class="fp-chk-item"><input type="checkbox"> コラム</label>
-              <label class="fp-chk-item"><input type="checkbox"> ブログ</label>
-              <label class="fp-chk-item"><input type="checkbox"> 症例紹介</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a3blg-chk" oninput="syncFP('a3blgq','a3blg-chk','a3blg-extra')"> おしらせ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a3blg-chk" oninput="syncFP('a3blgq','a3blg-chk','a3blg-extra')"> コラム</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a3blg-chk" oninput="syncFP('a3blgq','a3blg-chk','a3blg-extra')"> ブログ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a3blg-chk" oninput="syncFP('a3blgq','a3blg-chk','a3blg-extra')"> 症例紹介</label>
             </div>
-            <input type="text" class="fp-extra-input" placeholder="その他のタイプ名（カンマ区切りで追記）">
+            <input type="text" id="a3blg-extra" class="fp-extra-input" placeholder="その他のタイプ名（カンマ区切りで追記　例：症例報告）" oninput="syncFP('a3blgq','a3blg-chk','a3blg-extra')">
           </div>
         </td>
       </tr>
