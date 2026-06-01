@@ -98,6 +98,8 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
 .btn-pr:hover{background:var(--primary);color:#fff}
 .btn-fig{width:100%;background:transparent;color:#4b2e7a;border:2px solid #7c5cbf;border-radius:9px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;margin-top:7px;font-family:inherit;transition:all .2s}
 .btn-fig:hover{background:#7c5cbf;color:#fff}
+.btn-csv{width:100%;background:transparent;color:#1e6b3e;border:2px solid #2e8b57;border-radius:9px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;margin-top:7px;font-family:inherit;transition:all .2s}
+.btn-csv:hover{background:#2e8b57;color:#fff}
 .mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
 .mov.open{display:flex}
 .mo2{background:#fff;border-radius:var(--r);padding:24px;max-width:680px;width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 8px 40px rgba(0,0,0,.25);position:relative}
@@ -109,7 +111,7 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
 .cm{color:var(--success);font-size:11px;margin-left:8px;display:none}
 .req{color:#e74c3c;margin-left:2px}
 .sm{font-size:11px !important;vertical-align:middle;margin-left:5px}
-@media print{.sb .btn-gen,.sb .btn-pr,header{display:none}.pw{grid-template-columns:1fr}.card{box-shadow:none;border:1px solid #ddd}body{background:#fff}}
+@media print{.sb .btn-gen,.sb .btn-pr,.sb .btn-fig,.sb .btn-csv,header{display:none}.pw{grid-template-columns:1fr}.card{box-shadow:none;border:1px solid #ddd}body{background:#fff}}
 .fp-toggle-btn{background:none;border:1px solid var(--border);border-radius:5px;padding:2px 7px;font-size:10px;cursor:pointer;color:var(--sub);margin-top:4px;font-family:inherit;transition:all .2s}
 .fp-toggle-btn:hover{border-color:var(--pl);color:var(--pl)}
 .fp-detail{background:#f5f3ef;padding:10px 12px;border-top:1px dashed var(--border)}
@@ -219,6 +221,8 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
               <label class="fp-chk-item"><input type="checkbox" class="a1fp-chk" oninput="syncFP('a1fp','a1fp-chk','a1fp-extra')"> 院長紹介ページ</label>
               <label class="fp-chk-item"><input type="checkbox" class="a1fp-chk" oninput="syncFP('a1fp','a1fp-chk','a1fp-extra')"> 設備・施設紹介ページ</label>
               <label class="fp-chk-item"><input type="checkbox" class="a1fp-chk" oninput="syncFP('a1fp','a1fp-chk','a1fp-extra')"> よくある質問ページ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a1fp-chk" oninput="syncFP('a1fp','a1fp-chk','a1fp-extra')"> 料金表ページ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a1fp-chk" oninput="syncFP('a1fp','a1fp-chk','a1fp-extra')"> ホテル・トリミングページ</label>
             </div>
             <input type="text" id="a1fp-extra" class="fp-extra-input" placeholder="その他のページ名（カンマ区切りで追記　例：採用情報, 個人情報保護方針）" oninput="syncFP('a1fp','a1fp-chk','a1fp-extra')">
           </div>
@@ -295,6 +299,8 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
               <label class="fp-chk-item"><input type="checkbox" class="a2fp-chk" oninput="syncFP('a2fp','a2fp-chk','a2fp-extra')"> 院長紹介ページ</label>
               <label class="fp-chk-item"><input type="checkbox" class="a2fp-chk" oninput="syncFP('a2fp','a2fp-chk','a2fp-extra')"> 設備・施設紹介ページ</label>
               <label class="fp-chk-item"><input type="checkbox" class="a2fp-chk" oninput="syncFP('a2fp','a2fp-chk','a2fp-extra')"> よくある質問ページ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a2fp-chk" oninput="syncFP('a2fp','a2fp-chk','a2fp-extra')"> 料金表ページ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a2fp-chk" oninput="syncFP('a2fp','a2fp-chk','a2fp-extra')"> ホテル・トリミングページ</label>
             </div>
             <input type="text" id="a2fp-extra" class="fp-extra-input" placeholder="その他のページ名（カンマ区切りで追記　例：採用情報, 個人情報保護方針）" oninput="syncFP('a2fp','a2fp-chk','a2fp-extra')">
           </div>
@@ -369,6 +375,8 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
               <label class="fp-chk-item"><input type="checkbox" class="a3fp-chk" oninput="syncFP('a3fp','a3fp-chk','a3fp-extra')"> 院長紹介ページ</label>
               <label class="fp-chk-item"><input type="checkbox" class="a3fp-chk" oninput="syncFP('a3fp','a3fp-chk','a3fp-extra')"> 設備・施設紹介ページ</label>
               <label class="fp-chk-item"><input type="checkbox" class="a3fp-chk" oninput="syncFP('a3fp','a3fp-chk','a3fp-extra')"> よくある質問ページ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a3fp-chk" oninput="syncFP('a3fp','a3fp-chk','a3fp-extra')"> 料金表ページ</label>
+              <label class="fp-chk-item"><input type="checkbox" class="a3fp-chk" oninput="syncFP('a3fp','a3fp-chk','a3fp-extra')"> ホテル・トリミングページ</label>
             </div>
             <input type="text" id="a3fp-extra" class="fp-extra-input" placeholder="その他のページ名（カンマ区切りで追記　例：採用情報, 個人情報保護方針）" oninput="syncFP('a3fp','a3fp-chk','a3fp-extra')">
           </div>
@@ -624,6 +632,7 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
     <div id="smo" class="sb-mo" style="display:none"><span class="ml">＋保守プラン</span><span class="mv" id="smov"></span></div>
 
     <button class="btn-gen" onclick="showOut()">📋 MF用データを生成</button>
+    <button class="btn-csv" onclick="exportCSV()">📊 MF用CSVダウンロード</button>
     <button class="btn-pr" onclick="window.print()">🖨️ 印刷・PDF保存</button>
     <button class="btn-fig" onclick="exportJSON()">📐 Figma用データ出力</button>
   </div>
@@ -1350,6 +1359,137 @@ function exportJSON(){
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
+}
+
+// ── MF用CSV出力 ────────────────────────────────────────────────
+// マネーフォワード クラウド見積 取り込み用CSV（公式テンプレート準拠／UTF-8 BOM付き）
+// 35列・2行型：1行目=ヘッダー、2行目=「見積書」行（基本情報＋合計）、3行目以降=「品目」行
+function exportCSV(){
+  const c=window._c;
+  if(!c){ alert('プランを選択してから出力してください'); return; }
+  const cn=$('cName')?.value||'';
+  const cc=$('cContact')?.value||'';
+  const no=$('cNo')?.value||'';
+  const nt=$('cNote')?.value||'';
+  const today=new Date();
+  const pad=n=>String(n).padStart(2,'0');
+  const ymd=d=>`${d.getFullYear()}/${pad(d.getMonth()+1)}/${pad(d.getDate())}`;
+  const ymdFile=d=>`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
+  const issueDate=ymd(today);
+  const subject='ウェブサイト制作費';
+  const taxRate='10%';    // 品目消費税率
+  const withhold='含まない'; // 源泉徴収
+
+  // 各品目行: [品名, 単価, 数量, 単位, 詳細(=セクション名), 金額]
+  const items=[];
+  const add=(name,price,qty,unit,detail,amount)=>{
+    if(amount==null) amount=price*qty;
+    items.push([name,price,qty,unit,detail,amount]);
+  };
+
+  if(c.at&&c.adat){
+    const p=AP[c.at];
+    const sec=`病院サイト（${p.lbl}）`;
+    p.setup.forEach(i=>add(i.n,i.p,1,'式',sec));
+    if(c.adat.topq>0) add('TOPページ',p.top,c.adat.topq,'p',sec,c.adat.topt);
+    add('固定ページ',p.fup,c.adat.fq,'p',sec,c.adat.ft);
+    if(c.adat.blgq>0) add('ブログ・お知らせ投稿ページ',p.blog,c.adat.blgq,'式',sec,c.adat.blgt);
+    if(c.adat.errq>0) add('404エラーページ',p.err,c.adat.errq,'p',sec,c.adat.errt);
+    if(c.adat.frmq>0) add('お問い合わせフォーム',p.form,c.adat.frmq,'式',sec,c.adat.frmt);
+    add('SEO基本設定',p.seup,c.adat.sq,'p',sec,c.adat.st);
+    if(c.adat.lsq>0)  add('ローカルSEO設定',p.lseo,c.adat.lsq,'式',sec,c.adat.lst);
+    if(c.adat.pspq>0) add('PageSpeed最適化',p.ps,c.adat.pspq,'式',sec,c.adat.pspt);
+    if(c.adat.cpyq>0) add('文章制作',p.copy,c.adat.cpyq,'式',sec,c.adat.cpyt);
+  }
+
+  if(c.bdat){
+    const sec='採用サイト（B STUDIOテンプレート）';
+    if(c.isAB) add('進行管理費',BP.mgmt,1,'式',sec+'（A+Bセット割引）',0);
+    else if(c.bdat.mgmtq>0) add('進行管理費',BP.mgmt,c.bdat.mgmtq,'式',sec,c.bdat.mgmt);
+    if(c.bdat.wfq>0)   add('ワイヤーフレーム制作',BP.wf,c.bdat.wfq,'式',sec,c.bdat.wf);
+    if(c.bdat.wpq>0)   add('WordPress基本設定・構築',BP.wpsetup,c.bdat.wpq,'式',sec,c.bdat.wpset);
+    if(c.bdat.demoq>0) add('デモ環境構築・本番移行作業',BP.demo,c.bdat.demoq,'式',sec,c.bdat.demo);
+    if(c.bdat.tmplq>0) add('テンプレート適用',BP.tmpl,c.bdat.tmplq,'式',sec,c.bdat.tmpl);
+    if(c.bdat.topq>0)  add('TOPページ',BP.top,c.bdat.topq,'p',sec,c.bdat.topt);
+    add('固定ページ',BP.fup,c.bdat.fq,'p',sec,c.bdat.ft);
+    if(c.bdat.psq>0)   add('投稿単一ページ（詳細）',BP.psup,c.bdat.psq,'タイプ',sec,c.bdat.pst);
+    if(c.bdat.plstq>0) add('投稿一覧ページ',BP.plist,c.bdat.plstq,'式',sec,c.bdat.plstt);
+    if(c.bdat.errq>0)  add('404ページ',BP.err,c.bdat.errq,'p',sec,c.bdat.errt);
+    if(c.bdat.frmq>0)  add('お問い合わせフォーム',BP.form,c.bdat.frmq,'式',sec,c.bdat.frmt);
+    if(c.bdat.priq>0)  add('プライバシーポリシー',BP.priv,c.bdat.priq,'p',sec,c.bdat.prit);
+    add('SEO基本設定',BP.seup,c.bdat.sq,'p',sec,c.bdat.st);
+    if(c.bdat.lsq>0)   add('ローカルSEO設定',BP.lseo,c.bdat.lsq,'式',sec,c.bdat.lst);
+    if(c.bdat.cpyq>0)  add('文章制作',BP.copy,c.bdat.cpyq,'式',sec,c.bdat.cpyt);
+  }
+
+  if(c.brt>0) add('分院トップページ',30000,c.brq,'拠点','拡張オプション',c.brt);
+  if(c.spt>0) add('専門外来ページ（テキスト含む）',30000,c.spq,'p','拡張オプション',c.spt);
+
+  if(c.permv>0) add('パーマリンク統一・リダイレクト設定費',10000,1,'式','コンテンツ移行・調整',10000);
+  if(c.postt>0) add('コンテンツ調整費',650,c.postq,'記事','コンテンツ移行・調整',c.postt);
+
+  if(c.mrg) add('マルチサイト統合費',60000,1,'式','移行・リニューアル対応',60000);
+  if(c.mnw) add('分院マルチサイト設定費',45000,1,'式','移行・リニューアル対応',45000);
+
+  if(items.length===0){ alert('明細がありません。プランや項目を入力してください。'); return; }
+
+  // === MF公式テンプレート 35列 ===
+  const header=[
+    'csv_type(変更不可)','行形式','取引先名称','件名','発行日','見積書番号','メモ','タグ',
+    '小計','消費税','源泉徴収税','合計金額',
+    '取引先敬称','取引先郵便番号','取引先都道府県','取引先住所1','取引先住所2',
+    '取引先部署','取引先担当者役職','取引先担当者氏名','自社担当者氏名','備考',
+    '受注ステータス','メール送信ステータス','郵送ステータス','ダウンロードステータス',
+    '品名','品目コード','単価','数量','単位','詳細','金額','源泉徴収','品目消費税率'
+  ];
+  const esc=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=[header.map(esc).join(',')];
+
+  // 見積書ヘッダー行（行形式=見積書）
+  const head=new Array(35).fill('');
+  head[0]='30301';        // csv_type(変更不可)
+  head[1]='見積書';
+  head[2]=cn;             // 取引先名称
+  head[3]=subject;        // 件名
+  head[4]=issueDate;      // 発行日
+  head[5]=no;             // 見積書番号
+  head[8]=c.grand;        // 小計
+  head[9]=c.tax;          // 消費税
+  head[10]=0;             // 源泉徴収税
+  head[11]=c.tot;         // 合計金額
+  head[12]='御中';        // 取引先敬称
+  head[19]=cc;            // 取引先担当者氏名
+  head[21]=nt;            // 備考
+  rows.push(head.map(esc).join(','));
+
+  // 品目行（行形式=品目）
+  items.forEach(([name,price,qty,unit,detail,amount])=>{
+    const r=new Array(35).fill('');
+    r[0]='30301';
+    r[1]='品目';
+    r[26]=name;       // 品名
+    r[28]=price;      // 単価
+    r[29]=qty;        // 数量
+    r[30]=unit;       // 単位
+    r[31]=detail;     // 詳細（セクション名）
+    r[32]=amount;     // 金額
+    r[33]=withhold;   // 源泉徴収
+    r[34]=taxRate;    // 品目消費税率
+    rows.push(r.map(esc).join(','));
+  });
+
+  // BOM(﻿)付きUTF-8でBlob化してダウンロード
+  const csv='﻿'+rows.join('\r\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  const safeName=(cn||'estimate').replace(/[\/\\:*?"<>|]/g,'_');
+  a.href=url;
+  a.download=`mf-estimate_${safeName}_${ymdFile(today)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 </script>
 </body>
