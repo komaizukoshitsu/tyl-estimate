@@ -1033,6 +1033,32 @@ function syncPS(){
   if(inp){ inp.value=chks.length+customCount; upd(); }
 }
 
+// ── 備考欄 自動追記 ────────────────────────────────────────────
+// 移行関連の選択状況に応じて、自動で備考欄に追記する文言を生成
+function getAutoNotes(c){
+  const notes=[];
+  const hasMig=c.svr||c.svm||c.nwp||c.imp||c.mrg||c.mnw||c.permv>0||c.postq>0;
+  if(!hasMig) return notes;
+  // マルチサイト関連が無ければ「シングル→シングル移行」と明記
+  if(!c.mrg && !c.mnw){
+    notes.push('本見積もりはシングルサイト→シングルサイトへの移行を想定しています。');
+  }
+  // サーバー移管作業費の扱い
+  if(c.svm){
+    notes.push('サーバー移管作業費（¥25,000）を本見積もりに含みます。');
+  } else {
+    notes.push('サーバー移管作業を当社にて承る場合は別途「サーバー移管作業費 ¥25,000」が必要です。');
+  }
+  return notes;
+}
+// 全備考行（ユーザー入力＋自動追記）を配列で返す
+function getAllMemoLines(c, userNote){
+  const lines=[];
+  if(userNote) lines.push(userNote);
+  getAutoNotes(c).forEach(n=>lines.push(n));
+  return lines;
+}
+
 // ── MF出力 ─────────────────────────────────────────────────────
 function showOut(){
   const c=window._c; if(!c) return;
@@ -1121,7 +1147,13 @@ function showOut(){
   L.push('═══════════════════════════════════════════');
   if(c.mop>0) L.push(`\n【保守プラン】${c.molbl}（公開後・別途月額）`);
   L.push('\n※ サーバー・ドメイン費用は貴社側ご負担となります。');
-  if(nt) L.push(`\n備考：${nt}`);
+  const memoLines=getAllMemoLines(c,nt);
+  if(memoLines.length===1){
+    L.push(`\n備考：${memoLines[0]}`);
+  } else if(memoLines.length>1){
+    L.push('\n備考：');
+    memoLines.forEach(n=>L.push(`　・${n}`));
+  }
 
   const obox=$('obox'); if(obox) obox.textContent=L.join('\n');
   const modal=$('modal'); if(modal) modal.classList.add('open');
@@ -1474,7 +1506,7 @@ function exportCSV(){
   head[11]=c.tot;         // 合計金額
   head[12]='御中';        // 取引先敬称
   head[19]=cc;            // 取引先担当者氏名
-  head[21]=nt;            // 備考
+  head[21]=getAllMemoLines(c,nt).join('\n'); // 備考（ユーザー入力＋移行関連の自動追記）
   rows.push(head.map(esc).join(','));
 
   // 品目行（行形式=品目）
