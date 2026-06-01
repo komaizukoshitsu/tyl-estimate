@@ -490,25 +490,6 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
       <tr><td>文章制作<sub>採用情報・会社紹介・募集要項等テキスト全般</sub></td><td><input type="number" id="bcpyq" value="1" min="0" max="3" oninput="upd()"></td><td>150,000円/式</td><td class="pc2 st" id="bcpyt">150,000円</td></tr>
     </tbody></table>
   </div>
-  <div class="isec">
-    <div class="isl">コンテンツ移行・調整</div>
-    <ul class="ol">
-      <li>
-        <label class="olbl"><input type="checkbox" id="mperm" onchange="upd()">
-          <div><span class="on">パーマリンク統一・リダイレクト設定費</span><span class="od">旧テーマのURL構造を統一し、301リダイレクトを設定。</span></div>
-        </label>
-        <span class="op">10,000円</span>
-      </li>
-      <li>
-        <div style="flex:1"><span class="on">コンテンツ調整費</span><span class="od">既存投稿記事をリニューアルテーマに合わせて移行・調整。650円/記事。</span></div>
-        <div class="oqp">
-          <input type="number" id="mpost" value="0" min="0" oninput="upd()" style="width:70px" placeholder="記事数">
-          <span class="ounit">記事</span>
-          <span class="op" id="mpostt" style="min-width:72px">0円</span>
-        </div>
-      </li>
-    </ul>
-  </div>
 </div>
 
 <!-- 拡張オプション (A plans) -->
@@ -539,6 +520,12 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
       </label>
       <span class="op tbd">別途見積もり</span>
     </li>
+    <li>
+      <label class="olbl"><input type="checkbox" id="msvm" onchange="upd()">
+        <div><span class="on">サーバー移管作業費</span><span class="od">旧サーバーから新サーバーへの移管。DNS切替・SSL再設定・旧サーバーからのバックアップ取得など一括対応。</span></div>
+      </label>
+      <span class="op">25,000円</span>
+    </li>
   </ul>
 
   <p class="ogl" style="margin-top:12px">■ 旧サイトからのコンテンツ移行</p>
@@ -548,6 +535,26 @@ sub{display:block;font-size:10px;color:#999;margin-top:1px}
         <div><span class="on">非WPサイト移行費</span><span class="od">旧サイトがWordPress以外（Wix・Jimdo・HTML等）の場合のコンテンツ移行作業。</span></div>
       </label>
       <span class="op tbd">30,000円〜<br>別途見積もり</span>
+    </li>
+    <li>
+      <label class="olbl"><input type="checkbox" id="mimp" onchange="upd()">
+        <div><span class="on">旧サイトデータ取り込み作業費</span><span class="od">All-in-One WP Migration（有償版）を用いた旧サイト→新サイトへの一括取り込み（記事・固定ページ・メディア・設定）と動作検証。</span></div>
+      </label>
+      <span class="op">20,000円</span>
+    </li>
+    <li>
+      <label class="olbl"><input type="checkbox" id="mperm" onchange="upd()">
+        <div><span class="on">パーマリンク統一・リダイレクト設定費</span><span class="od">旧テーマのURL構造を統一し、301リダイレクトを設定。</span></div>
+      </label>
+      <span class="op">10,000円</span>
+    </li>
+    <li>
+      <div style="flex:1"><span class="on">コンテンツ調整費</span><span class="od">既存投稿記事をリニューアルテーマに合わせて移行・調整。650円/記事。</span></div>
+      <div class="oqp">
+        <input type="number" id="mpost" value="0" min="0" oninput="upd()" style="width:70px" placeholder="記事数">
+        <span class="ounit">記事</span>
+        <span class="op" id="mpostt" style="min-width:72px">0円</span>
+      </div>
     </li>
   </ul>
 
@@ -870,10 +877,12 @@ function upd(){
 
   // 移行・リニューアル（サーバー・WP構成）
   const svr=$('msvr')?.checked;
+  const svm=$('msvm')?.checked;   // サーバー移管作業費
   const nwp=$('mnwp')?.checked;
+  const imp=$('mimp')?.checked;   // 旧サイトデータ取り込み作業費
   const mrg=$('mmrg')?.checked;
   const mnw=$('mmnw')?.checked;
-  const migcalc=(mrg?60000:0)+(mnw?45000:0);
+  const migcalc=(mrg?60000:0)+(mnw?45000:0)+(svm?25000:0)+(imp?20000:0);
   grand+=migcalc;
 
   // 保守
@@ -963,7 +972,9 @@ function upd(){
   // 移行・リニューアル
   const migItems=[];
   if(svr) migItems.push(`<li><span class="sin">サーバー環境適合調査・調整</span><span class="siv tbd">別途</span></li>`);
+  if(svm) migItems.push(sl('サーバー移管作業費',25000));
   if(nwp) migItems.push(`<li><span class="sin">非WPサイト移行費</span><span class="siv tbd">別途</span></li>`);
+  if(imp) migItems.push(sl('旧サイトデータ取り込み作業費',20000));
   if(mrg) migItems.push(sl('マルチサイト統合費',60000));
   if(mnw) migItems.push(sl('分院マルチサイト設定費',45000));
   if(migItems.length){
@@ -981,7 +992,7 @@ function upd(){
     else smoE.style.display='none';
   }
 
-  window._c={plan,at,adat,bdat,isAB,isA,isB,brq,brt,spq,spt,svr,nwp,mrg,mnw,permv,postq,postt,mop,molbl,grand,tax,tot};
+  window._c={plan,at,adat,bdat,isAB,isA,isB,brq,brt,spq,spt,svr,svm,nwp,imp,mrg,mnw,permv,postq,postt,mop,molbl,grand,tax,tot};
 }
 
 function sl(n,p){return`<li><span class="sin">${n}</span><span class="siv">${fmt(p)}円</span></li>`;}
@@ -1090,12 +1101,14 @@ function showOut(){
     if(c.postt>0)   L.push(rw(`コンテンツ調整費（${c.postq}記事×650円）`,c.postq+'記事',650,c.postt));
   }
 
-  const hasMig=c.svr||c.nwp||c.mrg||c.mnw;
+  const hasMig=c.svr||c.svm||c.nwp||c.imp||c.mrg||c.mnw;
   if(hasMig){
     L.push(''); L.push('▼ 移行・リニューアル対応');
     L.push('─────────────────────────────────────────────');
     if(c.svr) L.push('サーバー環境適合調査・調整費　　　別途見積もり');
+    if(c.svm) L.push(rw('サーバー移管作業費','1式',25000,25000));
     if(c.nwp) L.push('非WPサイト移行費　30,000円〜　　別途見積もり');
+    if(c.imp) L.push(rw('旧サイトデータ取り込み作業費','1式',20000,20000));
     if(c.mrg) L.push(rw('マルチサイト統合費','1式',60000,60000));
     if(c.mnw) L.push(rw('分院マルチサイト設定費','1式',45000,45000));
   }
@@ -1337,7 +1350,7 @@ function exportJSON(){
       totals:{setup:c.bdat.setup,design:c.bdat.topt+c.bdat.ft+c.bdat.pst+c.bdat.plstt+c.bdat.errt+c.bdat.frmt+c.bdat.prit,seo:c.bdat.st+c.bdat.lst,copywriting:c.bdat.cpyt,subtotal:c.bdat.total}
     }:null,
     extras:{branchTop:{count:c.brq,total:c.brt},specialtyPage:{count:c.spq,total:c.spt}},
-    migration:{permalink:c.permv>0,contentAdjust:c.postq,serverCheck:!!c.svr,nonWPMigration:!!c.nwp,multiSiteMerge:!!c.mrg,branchMultiSite:!!c.mnw},
+    migration:{permalink:c.permv>0,contentAdjust:c.postq,serverCheck:!!c.svr,serverMigration:!!c.svm,nonWPMigration:!!c.nwp,dataImport:!!c.imp,multiSiteMerge:!!c.mrg,branchMultiSite:!!c.mnw},
     maintenance:{plan:c.mop>0?c.molbl:null,monthlyFee:c.mop},
     siteMap:siteMap,
     totals:{subtotal:c.grand,tax:c.tax,total:c.tot},
@@ -1428,6 +1441,8 @@ function exportCSV(){
   if(c.permv>0) add('パーマリンク統一・リダイレクト設定費',10000,1,'式','コンテンツ移行・調整',10000);
   if(c.postt>0) add('コンテンツ調整費',650,c.postq,'記事','コンテンツ移行・調整',c.postt);
 
+  if(c.svm) add('サーバー移管作業費',25000,1,'式','移行・リニューアル対応',25000);
+  if(c.imp) add('旧サイトデータ取り込み作業費',20000,1,'式','移行・リニューアル対応',20000);
   if(c.mrg) add('マルチサイト統合費',60000,1,'式','移行・リニューアル対応',60000);
   if(c.mnw) add('分院マルチサイト設定費',45000,1,'式','移行・リニューアル対応',45000);
 
